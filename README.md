@@ -6,7 +6,7 @@ legendary airbnb drawer menu in swift
 Demo
 ----
 
-![alt tag]()
+![alt tag](https://raw.githubusercontent.com/cemolcay/AirDrawerMenuViewController/master/demo.gif)
 
 Install
 -------
