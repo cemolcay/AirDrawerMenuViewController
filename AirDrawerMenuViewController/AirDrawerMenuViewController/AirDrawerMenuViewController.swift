@@ -101,7 +101,26 @@ class AirDrawerMenuViewController: UIViewController {
     }
     
     
-    // MARK: Menu
+    // MARK: Drawer
+    
+    func reloadDrawer () {
+        
+        if let ds = dataSource {
+            
+            leftMenuViewController.reloadLeftMenu()
+            
+            let count = ds.AirDrawerMenuViewControllerNumberOfViewControllersInContentView()
+            var viewControllers: [UIViewController] = []
+            for i in 0..<count {
+                viewControllers.append(ds.AirDrawerMenuViewController(i))
+            }
+            
+            contentViewController.viewControllers = viewControllers
+        }
+    }
+
+    
+    // MARK: Interaction
     
     func openMenu (completion: (() -> Void)? = nil) {
     
@@ -129,25 +148,7 @@ class AirDrawerMenuViewController: UIViewController {
         }
     }
     
-
-    // MARK: Drawer
     
-    func reloadDrawer () {
-        
-        if let ds = dataSource {
-            
-            leftMenuViewController.reloadLeftMenu()
-            
-            let count = ds.AirDrawerMenuViewControllerNumberOfViewControllersInContentView()
-            var viewControllers: [UIViewController] = []
-            for i in 0..<count {
-                viewControllers.append(ds.AirDrawerMenuViewController(i))
-            }
-            
-            contentViewController.viewControllers = viewControllers
-        }
-    }
-
     func moveViewControllerAtIndex (index: Int, completion: (() -> Void)? = nil) {
         if let vc = contentViewController.viewControllers?[index] {
             moveViewController(vc, completion: completion)

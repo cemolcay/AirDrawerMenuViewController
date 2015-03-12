@@ -75,25 +75,13 @@ class LeftMenuViewController: AirDrawerMenuLeftViewController {
     
     @IBAction func buttonPressed (sender: UIButton) {
         
-        airDrawerMenu?.closeMenu()
-        
-        switch sender.tag {
-        case 0:
-            println ("first")
+        airDrawerMenu?.closeMenu(completion: {
+            let newvc = UIViewController ()
+            newvc.title = "new"
+            newvc.view.backgroundColor = UIColor.randomColor()
             
-        case 1:
-            println ("second")
-            
-        case 2:
-            println ("third")
-            
-        case 3:
-            println ("forth")
-            
-        default:
-            break
-        }
-        
+            self.airDrawerMenu?.moveViewControllerAtIndex(sender.tag)
+        })
     }
     
     

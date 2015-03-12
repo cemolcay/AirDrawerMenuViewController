@@ -21,7 +21,6 @@ class AirDrawerMenuContentViewController: UIViewController {
     }
     
     
-    
     // MARK: Menu Navigation
     
     func moveFirstViewController () {
@@ -47,8 +46,8 @@ class AirDrawerMenuContentViewController: UIViewController {
         
         transitionFromViewController (currentViewController,
             toViewController: to,
-            duration: 0.5,
-            options: .TransitionCrossDissolve,
+            duration: 0,
+            options: .TransitionNone,
             animations: { [unowned self] () -> Void in
                 
             },
@@ -59,7 +58,6 @@ class AirDrawerMenuContentViewController: UIViewController {
                 completion? ()
             })
     }
-    
     
     
     // MARK: Animations
