@@ -103,7 +103,7 @@ class AirDrawerMenuViewController: UIViewController {
     
     // MARK: Menu
     
-    func openMenu () {
+    func openMenu (completion: (() -> Void)? = nil) {
     
         drawerDelegate?.AirDrawerMenuViewControllerWillOpenMenu!()
         
@@ -111,11 +111,12 @@ class AirDrawerMenuViewController: UIViewController {
         leftMenuViewController.openLeftMenuAnimation(nil)
         contentViewController.openAnimation {
             self.drawerDelegate?.AirDrawerMenuViewControllerDidOpenMenu!()
+            completion? ()
         }
         
     }
     
-    func closeMenu () {
+    func closeMenu (completion: (() -> Void)? = nil) {
         
         drawerDelegate?.AirDrawerMenuViewControllerWillCloseMenu!()
         
@@ -124,6 +125,7 @@ class AirDrawerMenuViewController: UIViewController {
         leftMenuViewController.closeLeftMenuAnimation(nil)
         contentViewController.closeAnimation {
             self.drawerDelegate?.AirDrawerMenuViewControllerDidCloseMenu!()
+            completion? ()
         }
     }
     
@@ -146,15 +148,15 @@ class AirDrawerMenuViewController: UIViewController {
         }
     }
 
-    func moveViewControllerAtIndex (index: Int) {
+    func moveViewControllerAtIndex (index: Int, completion: (() -> Void)? = nil) {
         if let vc = contentViewController.viewControllers?[index] {
-            moveViewController(vc)
+            moveViewController(vc, completion: completion)
         }
     }
     
-    func moveViewController (viewController: UIViewController) {
+    func moveViewController (viewController: UIViewController, completion: (() -> Void)? = nil) {
         if contains(contentViewController.viewControllers, viewController) {
-            contentViewController.moveViewController(viewController)
+            contentViewController.moveViewController(viewController, completion: completion)
         }
     }
     

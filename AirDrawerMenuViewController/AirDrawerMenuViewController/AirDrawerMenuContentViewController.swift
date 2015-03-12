@@ -34,7 +34,7 @@ class AirDrawerMenuContentViewController: UIViewController {
         currentViewController.didMoveToParentViewController(self)
     }
     
-    func moveViewController (to: UIViewController) {
+    func moveViewController (to: UIViewController, completion: (() -> Void)? = nil) {
         
         if to == currentViewController {
             return
@@ -56,6 +56,7 @@ class AirDrawerMenuContentViewController: UIViewController {
                 self.currentViewController.removeFromParentViewController()
                 self.currentViewController = to
                 to.didMoveToParentViewController(self)
+                completion? ()
             })
     }
     
