@@ -22,7 +22,7 @@ class ViewController: AirDrawerMenuViewController, AirDrawerMenuViewControllerDa
         super.viewDidLoad()
         
         for i in 0...3 {
-            containerViewControllers.append(vc ("\(i) vc", color: UIColor.redColor()))
+            containerViewControllers.append(vc ("\(i) vc"))
         }
         
         leftMenuViewController = UIStoryboard (name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("LeftMenuViewController") as! LeftMenuViewController
@@ -36,10 +36,10 @@ class ViewController: AirDrawerMenuViewController, AirDrawerMenuViewControllerDa
     
     // MARK: Setup
     
-    func vc (title: String, color: UIColor) -> UINavigationController {
+    func vc (title: String) -> UINavigationController {
         let vc = UIViewController ()
         vc.navigationItem.title = title
-        vc.view.backgroundColor = color
+        vc.view.backgroundColor = UIColor.randomColor()
         
         let but = UIBarButtonItem (title: "Drawer", style: .Plain, target: self, action: "openMenuPressed:")
         vc.navigationItem.leftBarButtonItem = but
