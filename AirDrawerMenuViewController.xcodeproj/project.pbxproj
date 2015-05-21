@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		B2816A311B0E224B00D4A7FE /* CEMKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2816A301B0E224B00D4A7FE /* CEMKit.swift */; };
+		B2816A371B0E25C100D4A7FE /* LeftMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2816A351B0E25C100D4A7FE /* LeftMenuViewController.swift */; };
+		B2816A381B0E25C100D4A7FE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2816A361B0E25C100D4A7FE /* ViewController.swift */; };
 		B2B4B0CF1AB17FE000B5EFC7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */; };
-		B2B4B0D11AB17FE000B5EFC7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0D01AB17FE000B5EFC7 /* ViewController.swift */; };
 		B2B4B0D41AB17FE000B5EFC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2B4B0D21AB17FE000B5EFC7 /* Main.storyboard */; };
 		B2B4B0D61AB17FE000B5EFC7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2B4B0D51AB17FE000B5EFC7 /* Images.xcassets */; };
 		B2B4B0D91AB17FE000B5EFC7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2B4B0D71AB17FE000B5EFC7 /* LaunchScreen.xib */; };
@@ -31,10 +32,11 @@
 
 /* Begin PBXFileReference section */
 		B2816A301B0E224B00D4A7FE /* CEMKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEMKit.swift; sourceTree = "<group>"; };
+		B2816A351B0E25C100D4A7FE /* LeftMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftMenuViewController.swift; sourceTree = "<group>"; };
+		B2816A361B0E25C100D4A7FE /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B2B4B0C91AB17FE000B5EFC7 /* AirDrawerMenuViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirDrawerMenuViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B4B0CD1AB17FE000B5EFC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B2B4B0D01AB17FE000B5EFC7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B2B4B0D31AB17FE000B5EFC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B2B4B0D51AB17FE000B5EFC7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B2B4B0D81AB17FE000B5EFC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -72,6 +74,16 @@
 			path = CEMKit;
 			sourceTree = "<group>";
 		};
+		B2816A341B0E25C100D4A7FE /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				B2816A361B0E25C100D4A7FE /* ViewController.swift */,
+				B2816A351B0E25C100D4A7FE /* LeftMenuViewController.swift */,
+			);
+			name = Demo;
+			path = AirDrawerMenuViewController/Demo;
+			sourceTree = "<group>";
+		};
 		B2B4B0C01AB17FE000B5EFC7 = {
 			isa = PBXGroup;
 			children = (
@@ -95,11 +107,7 @@
 			children = (
 				B2816A2F1B0E224B00D4A7FE /* CEMKit */,
 				B2B4B0EE1AB17FEE00B5EFC7 /* AirDrawerMenuViewController */,
-				B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */,
-				B2B4B0D01AB17FE000B5EFC7 /* ViewController.swift */,
-				B2B4B0D21AB17FE000B5EFC7 /* Main.storyboard */,
-				B2B4B0D51AB17FE000B5EFC7 /* Images.xcassets */,
-				B2B4B0D71AB17FE000B5EFC7 /* LaunchScreen.xib */,
+				B2816A341B0E25C100D4A7FE /* Demo */,
 				B2B4B0CC1AB17FE000B5EFC7 /* Supporting Files */,
 			);
 			path = AirDrawerMenuViewController;
@@ -108,6 +116,10 @@
 		B2B4B0CC1AB17FE000B5EFC7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */,
+				B2B4B0D21AB17FE000B5EFC7 /* Main.storyboard */,
+				B2B4B0D51AB17FE000B5EFC7 /* Images.xcassets */,
+				B2B4B0D71AB17FE000B5EFC7 /* LaunchScreen.xib */,
 				B2B4B0CD1AB17FE000B5EFC7 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -240,10 +252,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2B4B0D11AB17FE000B5EFC7 /* ViewController.swift in Sources */,
 				B2B4B0F81AB1959100B5EFC7 /* AirDrawerMenuLeftViewController.swift in Sources */,
 				B2B4B0CF1AB17FE000B5EFC7 /* AppDelegate.swift in Sources */,
+				B2816A371B0E25C100D4A7FE /* LeftMenuViewController.swift in Sources */,
 				B2B4B0F01AB17FFA00B5EFC7 /* AirDrawerMenuViewController.swift in Sources */,
+				B2816A381B0E25C100D4A7FE /* ViewController.swift in Sources */,
 				B2816A311B0E224B00D4A7FE /* CEMKit.swift in Sources */,
 				B2B4B0F61AB1803900B5EFC7 /* AirDrawerMenuContentViewController.swift in Sources */,
 			);

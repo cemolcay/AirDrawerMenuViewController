@@ -54,15 +54,14 @@ class ViewController: AirDrawerMenuViewController, AirDrawerMenuViewControllerDa
     
 
     // MARK: AirDrawerMenuViewControllerDataSource
-    
-    func AirDrawerMenuViewControllerNumberOfViewControllersInContentView () -> Int {
+
+    func airDrawerMenuViewControllerNumberOfViewControllersInContentView(airDrawerMenuViewController: AirDrawerMenuViewController) -> Int {
         return containerViewControllers.count
     }
     
-    func AirDrawerMenuViewController (viewControllerAtIndex: Int) -> UIViewController {
-        return containerViewControllers[viewControllerAtIndex]
+    func airDrawerMenuViewControllerViewControllerAtIndex(airDrawerMenuViewController: AirDrawerMenuViewController, index: Int) -> UIViewController {
+        return containerViewControllers[index]
     }
-    
 }
 
 class LeftMenuViewController: AirDrawerMenuLeftViewController {

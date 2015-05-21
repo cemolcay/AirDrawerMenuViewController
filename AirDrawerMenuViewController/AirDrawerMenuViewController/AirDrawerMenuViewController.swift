@@ -14,37 +14,34 @@ extension UIViewController {
 
     var airDrawerMenu: AirDrawerMenuViewController? {
         get {
-            if let parent = parentViewController {
+            var parent = parentViewController
+            while parent != nil {
                 if parent is AirDrawerMenuViewController {
                     return parent as? AirDrawerMenuViewController
-                } else if parent.parentViewController is AirDrawerMenuViewController {
-                    return parent.parentViewController as? AirDrawerMenuViewController
-                } else if parent.parentViewController?.parentViewController is AirDrawerMenuViewController {
-                    return parentViewController?.parentViewController?.parentViewController as? AirDrawerMenuViewController
                 } else {
-                    return nil
+                    parent = parent?.parentViewController
                 }
-            } else {
-                return nil
             }
+            
+            return nil
         }
     }
 }
 
 protocol AirDrawerMenuViewControllerDataSource {
     
-    func AirDrawerMenuViewControllerNumberOfViewControllersInContentView () -> Int
-    func AirDrawerMenuViewController (viewControllerAtIndex: Int) -> UIViewController
+    func airDrawerMenuViewControllerNumberOfViewControllersInContentView (airDrawerMenuViewController: AirDrawerMenuViewController) -> Int
+    func airDrawerMenuViewControllerViewControllerAtIndex (airDrawerMenuViewController: AirDrawerMenuViewController, index: Int) -> UIViewController
 
 }
 
 @objc protocol AirDrawerMenuViewControllerDelegate {
 
-    optional func AirDrawerMenuViewControllerWillOpenMenu ()
-    optional func AirDrawerMenuViewControllerDidOpenMenu ()
+    optional func airDrawerMenuViewControllerWillOpenMenu (airDrawerMenuViewController: AirDrawerMenuViewController)
+    optional func airDrawerMenuViewControllerDidOpenMenu (airDrawerMenuViewController: AirDrawerMenuViewController)
     
-    optional func AirDrawerMenuViewControllerWillCloseMenu ()
-    optional func AirDrawerMenuViewControllerDidCloseMenu ()
+    optional func airDrawerMenuViewControllerWillCloseMenu (airDrawerMenuViewController: AirDrawerMenuViewController)
+    optional func airDrawerMenuViewControllerDidCloseMenu (airDrawerMenuViewController: AirDrawerMenuViewController)
     
 }
 
@@ -90,10 +87,10 @@ class AirDrawerMenuViewController: UIViewController {
             
             leftMenuViewController.reloadLeftMenu()
             
-            let count = ds.AirDrawerMenuViewControllerNumberOfViewControllersInContentView()
+            let count = ds.airDrawerMenuViewControllerNumberOfViewControllersInContentView(self)
             var viewControllers: [UIViewController] = []
             for i in 0..<count {
-                viewControllers.append(ds.AirDrawerMenuViewController(i))
+                viewControllers.append(ds.airDrawerMenuViewControllerViewControllerAtIndex(self, index: i))
             }
             
             contentViewController.viewControllers = viewControllers
@@ -105,12 +102,12 @@ class AirDrawerMenuViewController: UIViewController {
     
     func openMenu (completion: (() -> Void)? = nil) {
     
-        drawerDelegate?.AirDrawerMenuViewControllerWillOpenMenu? ()
+        drawerDelegate?.airDrawerMenuViewControllerWillOpenMenu? (self)
         
         contentViewController.view.userInteractionEnabled = false
         leftMenuViewController.openLeftMenuAnimation(nil)
         contentViewController.openAnimation {
-            self.drawerDelegate?.AirDrawerMenuViewControllerDidOpenMenu? ()
+            self.drawerDelegate?.airDrawerMenuViewControllerDidOpenMenu? (self)
             completion? ()
         }
         
@@ -118,13 +115,13 @@ class AirDrawerMenuViewController: UIViewController {
     
     func closeMenu (completion: (() -> Void)? = nil) {
         
-        drawerDelegate?.AirDrawerMenuViewControllerWillCloseMenu? ()
+        drawerDelegate?.airDrawerMenuViewControllerWillCloseMenu? (self)
         
         contentViewController.view.userInteractionEnabled = true
         
         leftMenuViewController.closeLeftMenuAnimation(nil)
         contentViewController.closeAnimation {
-            self.drawerDelegate?.AirDrawerMenuViewControllerDidCloseMenu? ()
+            self.drawerDelegate?.airDrawerMenuViewControllerDidCloseMenu? (self)
             completion? ()
         }
     }

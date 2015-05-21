@@ -28,13 +28,12 @@ Create a subclass of `AirDrawerMenuViewController` and implement its `AirDrawerM
 
 ``` swift
     
-    func AirDrawerMenuViewControllerNumberOfViewControllersInContentView () -> Int {
-        return containerViewControllers.count
-    }
+protocol AirDrawerMenuViewControllerDataSource {
     
-    func AirDrawerMenuViewController (viewControllerAtIndex: Int) -> UIViewController {
-        return containerViewControllers[viewControllerAtIndex]
-    }
+    func airDrawerMenuViewControllerNumberOfViewControllersInContentView (airDrawerMenuViewController: AirDrawerMenuViewController) -> Int
+    func airDrawerMenuViewControllerViewControllerAtIndex (airDrawerMenuViewController: AirDrawerMenuViewController, index: Int) -> UIViewController
+
+}
     
 ```
 
