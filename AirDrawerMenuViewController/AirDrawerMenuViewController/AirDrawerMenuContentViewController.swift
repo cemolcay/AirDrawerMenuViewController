@@ -24,6 +24,12 @@ class AirDrawerMenuContentViewController: UIViewController {
     // MARK: Menu Navigation
     
     func moveFirstViewController () {
+        
+        if currentViewController != nil {
+            currentViewController!.willMoveToParentViewController(nil)
+            currentViewController.view.removeFromSuperview()
+        }
+        
         currentViewController = viewControllers[0]
         
         currentViewController.willMoveToParentViewController(self)
@@ -56,7 +62,7 @@ class AirDrawerMenuContentViewController: UIViewController {
                 self.currentViewController = to
                 to.didMoveToParentViewController(self)
                 completion? ()
-            })
+        })
     }
     
     
@@ -64,10 +70,11 @@ class AirDrawerMenuContentViewController: UIViewController {
 
     func openAnimation (completion: (() -> Void)?) {
         
-        UIView.animateWithDuration(
-            AirDrawerMenuViewControllerAnimationDuration,
+        UIView.animateWithDuration(AirDrawerMenuViewControllerAnimationDuration,
             delay: 0,
-            options: ( .CurveEaseInOut | .AllowUserInteraction ),
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 0,
+            options: nil,
             animations: {
                 [unowned self] in
                 
@@ -79,29 +86,30 @@ class AirDrawerMenuContentViewController: UIViewController {
                 transform2.m34 = -1.0 / 700.0
                 transform2 = CATransform3DRotate(transform2, -1, 0, 1, 0)
                 layer.transform = CATransform3DConcat(transform1, transform2)
-
             },
             completion: {
                 finished in
                 completion? ()
-            })
+        })
     }
     
     func closeAnimation (completion: (() -> Void)?) {
-        UIView.animateWithDuration(
-            AirDrawerMenuViewControllerAnimationDuration,
+        UIView.animateWithDuration(AirDrawerMenuViewControllerAnimationDuration,
             delay: 0,
-            options: ( .CurveEaseInOut | .AllowUserInteraction ),
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 0,
+            options: nil,
             animations: {
                 [unowned self] in
                 
                 self.currentViewController.view.frame = self.view.frame
-                let layer = currentViewController.view.layer
+                let layer = self.currentViewController.view.layer
                 
                 var transform2 = CATransform3DIdentity
                 transform2.m34 = -1.0 / 2000.0
                 transform2 = CATransform3DRotate(transform2, 1, 0, 0, 0)
                 layer.transform = transform2
+
             },
             completion: {
                 finished in

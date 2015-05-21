@@ -12,7 +12,7 @@ import UIKit
 
 // MARK: - AppDelegate
 
-// let APPDELEGATE: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+let APPDELEGATE: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
 
 
 // MARK: - UIView
@@ -206,7 +206,6 @@ extension UIView {
 extension UIView {
     
     func setAnchorPosition (anchorPosition: AnchorPosition) {
-        println(anchorPosition.rawValue)
         self.layer.anchorPoint = anchorPosition.rawValue
     }
     
@@ -294,6 +293,21 @@ extension UIView {
 
 extension UIView {
     
+    class func spring (
+        duration: NSTimeInterval = 0.5,
+        animations: () -> Void,
+        completion: ((Bool) -> Void)? = nil) {
+            
+        UIView.animateWithDuration(
+            duration,
+            delay: 0,
+            usingSpringWithDamping: 1,
+            initialSpringVelocity: 0,
+            options: nil,
+            animations: animations,
+            completion: completion)
+    }
+    
     func spring (
         animations: (()->Void),
         completion: ((Bool)->Void)? = nil) {
@@ -372,12 +386,47 @@ extension UIView {
     
     func addTapGesture (
         tapNumber: Int,
-        action: ((UITapGestureRecognizer)->())?) {
+        action: ((UITapGestureRecognizer) -> Void)?) {
             let tap = BlockTap (tapCount: tapNumber,
                 fingerCount: 1,
                 action: action)
             addGestureRecognizer(tap)
             userInteractionEnabled = true
+    }
+    
+    func addTapGestureWithOverlay (action: ((UITapGestureRecognizer) -> Void)?) {
+        addTapGesture (1, action: {
+            [unowned self] tap in
+            
+            var overlay: CALayer!
+            
+            for sub in self.layer.sublayers as! [CALayer] {
+                if let tag = sub.valueForKey("nameTag") as? String {
+                    if tag == "overlay layer" {
+                        overlay = sub
+                    }
+                }
+            }
+            
+            if overlay == nil {
+                overlay = CALayer ()
+                overlay.frame = self.bounds
+                overlay.backgroundColor = UIColor (white: 0, alpha: 0.2).CGColor
+                overlay.opacity = 0
+                overlay.setValue("overlay layer", forKey: "nameTag")
+            }
+            
+            let anim = CABasicAnimation (keyPath: "opacity")
+            anim.fromValue = 0
+            anim.toValue = 1
+            anim.duration = 0.2
+            anim.autoreverses = true
+            
+            overlay.addAnimation(anim, forKey: "overlayAnim")
+            self.layer.addSublayer(overlay)
+            
+            action? (tap)
+        })
     }
     
     func addSwipeGesture (
@@ -395,7 +444,7 @@ extension UIView {
     func addSwipeGesture (
         direction: UISwipeGestureRecognizerDirection,
         numberOfTouches: Int,
-        action: ((UISwipeGestureRecognizer)->())?) {
+        action: ((UISwipeGestureRecognizer) -> Void)?) {
             let swipe = BlockSwipe (direction: direction,
                 fingerCount: numberOfTouches,
                 action: action)
@@ -411,7 +460,7 @@ extension UIView {
             userInteractionEnabled = true
     }
     
-    func addPanGesture (action: ((UIPanGestureRecognizer)->())?) {
+    func addPanGesture (action: ((UIPanGestureRecognizer) -> Void)?) {
         let pan = BlockPan (action: action)
         addGestureRecognizer(pan)
         userInteractionEnabled = true
@@ -425,7 +474,7 @@ extension UIView {
             userInteractionEnabled = true
     }
     
-    func addPinchGesture (action: ((UIPinchGestureRecognizer)->())?) {
+    func addPinchGesture (action: ((UIPinchGestureRecognizer) -> Void)?) {
         let pinch = BlockPinch (action: action)
         addGestureRecognizer(pinch)
         userInteractionEnabled = true
@@ -439,13 +488,39 @@ extension UIView {
             userInteractionEnabled = true
     }
     
-    func addLongPressGesture (action: ((UILongPressGestureRecognizer)->())?) {
+    func addLongPressGesture (action: ((UILongPressGestureRecognizer) -> Void)?) {
         let longPress = BlockLongPress (action: action)
         addGestureRecognizer(longPress)
         userInteractionEnabled = true
     }
 }
 
+
+// MARK: - CALayer 
+
+extension CALayer {
+    
+    convenience init (x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat) {
+        self.init()
+        self.frame = CGRect (x: x, y: y, w: w, h: h)
+    }
+    
+    convenience init (x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat, backgroundColor: UIColor) {
+        self.init()
+        self.frame = CGRect (x: x, y: y, w: w, h: h)
+        self.backgroundColor = backgroundColor.CGColor
+    }
+}
+
+
+// MARK: - CGRect
+
+extension CGRect {
+    
+    init (x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat) {
+        self.init (x: x, y: y, width: w, height: h)
+    }
+}
 
 
 // MARK: - UIScrollView
@@ -588,7 +663,11 @@ extension UIViewController {
     
     
     func push (vc: UIViewController) {
-        navigationController?.pushViewController(vc, animated: true)
+        if self is UINavigationController {
+            (self as! UINavigationController).pushViewController (vc, animated: true)
+        } else {
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func pop () {
@@ -787,21 +866,24 @@ extension UILabel {
             self.h = self.getEstimatedHeight() + 2*padding
     }
     
+    
     convenience init (
         x: CGFloat,
         y: CGFloat,
+        height: CGFloat,
         text: String,
         textColor: UIColor,
         textAlignment: NSTextAlignment,
         font: UIFont) {
-            self.init(frame: CGRect (x: x, y: y, width: 10.0, height: 10.0))
-            self.text = text
-            self.textColor = textColor
-            self.textAlignment = textAlignment
-            self.font = font
-            
-            self.numberOfLines = 0
-            self.fitSize()
+        
+        self.init(frame: CGRect (x: x, y: y, width: 10.0, height: height))
+        self.text = text
+        self.textColor = textColor
+        self.textAlignment = textAlignment
+        self.font = font
+        
+        self.numberOfLines = 0
+        self.fitSize()
     }
     
     
@@ -875,6 +957,21 @@ extension UILabel {
             self.numberOfLines = 0
             self.fitSize()
     }
+ 
+    convenience init (
+        x: CGFloat,
+        y: CGFloat,
+        height: CGFloat,
+        attributedText: NSAttributedString,
+        textAlignment: NSTextAlignment) {
+            
+            self.init(frame: CGRect (x: x, y: y, width: 10.0, height: height))
+            self.attributedText = attributedText
+            self.textAlignment = textAlignment
+            
+            self.numberOfLines = 0
+            self.fitWidth()
+    }
     
 }
 
@@ -882,27 +979,28 @@ extension UILabel {
 
 // MARK: NSAttributedString
 
-extension NSAttributedString {
+enum NSAttributedStringStyle {
+    case plain
+    case underline (NSUnderlineStyle, UIColor)
+    case strike (UIColor, CGFloat)
     
-    enum NSAttributedStringStyle {
-        case plain
-        case underline (NSUnderlineStyle, UIColor)
-        case strike (UIColor, CGFloat)
-        
-        func attribute () -> [NSString: NSObject] {
-            switch self {
-                
-            case .plain:
-                return [:]
-                
-            case .underline(let styleName, let color):
-                return [NSUnderlineStyleAttributeName: styleName.rawValue, NSUnderlineColorAttributeName: color]
-                
-            case .strike(let color, let width):
-                return [NSStrikethroughColorAttributeName: color, NSStrikethroughStyleAttributeName: width]
-            }
+    func attribute () -> [NSString: NSObject] {
+        switch self {
+            
+        case .plain:
+            return [:]
+            
+        case .underline(let styleName, let color):
+            return [NSUnderlineStyleAttributeName: styleName.rawValue, NSUnderlineColorAttributeName: color]
+            
+        case .strike(let color, let width):
+            return [NSStrikethroughColorAttributeName: color, NSStrikethroughStyleAttributeName: width]
         }
     }
+}
+
+extension NSAttributedString {
+    
     
     func addAtt (attribute: [NSString: NSObject]) -> NSAttributedString {
         let mutable = NSMutableAttributedString (attributedString: self)
@@ -940,7 +1038,7 @@ extension NSAttributedString {
     }
     
     
-    class func withAttributedStrings (mutableString: (NSMutableAttributedString)->()) -> NSAttributedString {
+    class func withAttributedStrings (mutableString: (NSMutableAttributedString) -> Void) -> NSAttributedString {
         var mutable = NSMutableAttributedString ()
         mutableString (mutable)
         return mutable
@@ -952,8 +1050,17 @@ extension NSAttributedString {
 // MARK: - String
 
 extension String {
+    
+    subscript (i: Int) -> Character {
+        return self[advance(self.startIndex, i)]
+    }
+    
     subscript (i: Int) -> String {
-        return String(Array(self)[i])
+        return String(self[i] as Character)
+    }
+    
+    subscript (r: Range<Int>) -> String {
+        return substringWithRange(Range(start: advance(startIndex, r.startIndex), end: advance(startIndex, r.endIndex)))
     }
 }
 
@@ -1028,8 +1135,16 @@ extension UIFont {
         return AvenirNext(.DemiBold, size: size)
     }
     
+    class func AvenirNextMedium (size: CGFloat) -> UIFont {
+        return AvenirNext (.Medium, size: size)
+    }
+    
     class func AvenirNextRegular (size: CGFloat) -> UIFont {
         return AvenirNext(.Regular, size: size)
+    }
+    
+    class func AvenirNextBold (size: CGFloat) -> UIFont {
+        return AvenirNext (.Bold, size: size)
     }
 }
 
@@ -1250,6 +1365,12 @@ extension UIScreen {
         }
     }
     
+    class var NavigationFrame: CGRect {
+        get {
+            return CGRect (x: 0, y: 64, width: ScreenWidth, height: ScreenHeight - 64)
+        }
+    }
+    
     class var ScreenWidth: CGFloat {
         get {
             if UIInterfaceOrientationIsPortrait(Orientation) {
@@ -1309,6 +1430,23 @@ extension NSDate {
         formatter.dateFormat = format
         
         return formatter.stringFromDate(self)
+    }
+    
+    func toJsonString() ->String {
+//        let dateFormatter = NSDateFormatter()
+//        dateFormatter.dateFormat = "Z"
+//        dateFormatter.timeZone = NSTimeZone(name: "GMT")
+//        let current = dateFormatter.stringFromDate(self)
+        let timeInterval = self.timeIntervalSince1970
+        let result = String(format: "/Date(%.0f000)/", arguments:[timeInterval])
+        return result
+    }
+    
+    func fromString (format: String, string: String) -> NSDate? {
+        let formatter = NSDateFormatter ()
+        formatter.dateFormat = format
+        
+        return formatter.dateFromString(string)
     }
     
 }
@@ -1433,7 +1571,7 @@ func += <KeyType, ValueType> (inout left: Dictionary<KeyType, ValueType>,
 func delay (
     seconds: Double,
     queue: dispatch_queue_t = dispatch_get_main_queue(),
-    after: ()->()) {
+    after: () -> Void) {
         
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
         dispatch_after(time, queue, after)
@@ -1447,16 +1585,19 @@ func urlRequest (
     url: String,
     success: (NSData?)->Void,
     error: ((NSError)->Void)? = nil) {
-    NSURLConnection.sendAsynchronousRequest(
-        NSURLRequest (URL: NSURL (string: url)!),
-        queue: NSOperationQueue.mainQueue(),
-        completionHandler: { response, data, err in
-            if let e = err {
-                error? (e)
-            } else {
-                success (data)
-            }
-    })
+        
+    if let nsurl = NSURL (string: url) {
+        NSURLConnection.sendAsynchronousRequest(
+            NSURLRequest (URL: nsurl),
+            queue: NSOperationQueue.mainQueue(),
+            completionHandler: { response, data, err in
+                if let e = err {
+                    error? (e)
+                } else {
+                    success (data)
+                }
+            })
+    }
 }
 
 func imageRequest (
@@ -1546,7 +1687,7 @@ func actionSheet (
 func barButtonItem (
     imageName: String,
     size: CGFloat,
-    action: (AnyObject)->()) -> UIBarButtonItem {
+    action: (AnyObject) -> Void) -> UIBarButtonItem {
         let button = BlockButton (frame: CGRect(x: 0, y: 0, width: size, height: size))
         button.setImage(UIImage(named: imageName), forState: .Normal)
         button.actionBlock = action
@@ -1556,14 +1697,14 @@ func barButtonItem (
 
 func barButtonItem (
     imageName: String,
-    action: (AnyObject)->()) -> UIBarButtonItem {
+    action: (AnyObject) -> Void) -> UIBarButtonItem {
         return barButtonItem(imageName, 20, action)
 }
 
 func barButtonItem (
     title: String,
     color: UIColor,
-    action: (AnyObject)->()) -> UIBarButtonItem {
+    action: (AnyObject) -> Void) -> UIBarButtonItem {
         let button = BlockButton (frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         button.setTitle(title, forState: .Normal)
         button.setTitleColor(color, forState: .Normal)
@@ -1657,26 +1798,27 @@ class BlockWebView: UIWebView, UIWebViewDelegate {
 
 class BlockTap: UITapGestureRecognizer {
     
-    private var tapAction: ((UITapGestureRecognizer)->())?
+    private var tapAction: ((UITapGestureRecognizer) -> Void)?
     
     override init(target: AnyObject, action: Selector) {
         super.init(target: target, action: action)
     }
     
-    init (
+    convenience init (
         tapCount: Int,
         fingerCount: Int,
-        action: ((UITapGestureRecognizer)->())?) {
-            super.init()
-            numberOfTapsRequired = tapCount
-            numberOfTouchesRequired = fingerCount
-            tapAction = action
-            addTarget(self, action: "didTap:")
+        action: ((UITapGestureRecognizer) -> Void)?) {
+            self.init()
+            self.numberOfTapsRequired = tapCount
+            self.numberOfTouchesRequired = fingerCount
+            self.tapAction = action
+            self.addTarget(self, action: "didTap:")
     }
     
     func didTap (tap: UITapGestureRecognizer) {
         tapAction? (tap)
     }
+
 }
 
 
@@ -1685,16 +1827,16 @@ class BlockTap: UITapGestureRecognizer {
 
 class BlockPan: UIPanGestureRecognizer {
     
-    private var panAction: ((UIPanGestureRecognizer)->())?
+    private var panAction: ((UIPanGestureRecognizer) -> Void)?
     
     override init(target: AnyObject, action: Selector) {
         super.init(target: target, action: action)
     }
     
-    init (action: ((UIPanGestureRecognizer)->())?) {
-        super.init()
-        panAction = action
-        addTarget(self, action: "didPan:")
+    convenience init (action: ((UIPanGestureRecognizer) -> Void)?) {
+        self.init()
+        self.panAction = action
+        self.addTarget(self, action: "didPan:")
     }
     
     func didPan (pan: UIPanGestureRecognizer) {
@@ -1708,16 +1850,16 @@ class BlockPan: UIPanGestureRecognizer {
 
 class BlockSwipe: UISwipeGestureRecognizer {
     
-    private var swipeAction: ((UISwipeGestureRecognizer)->())?
+    private var swipeAction: ((UISwipeGestureRecognizer) -> Void)?
     
     override init(target: AnyObject, action: Selector) {
         super.init(target: target, action: action)
     }
     
-    init (direction: UISwipeGestureRecognizerDirection,
+    convenience init (direction: UISwipeGestureRecognizerDirection,
         fingerCount: Int,
-        action: ((UISwipeGestureRecognizer)->())?) {
-            super.init()
+        action: ((UISwipeGestureRecognizer) -> Void)?) {
+            self.init()
             self.direction = direction
             numberOfTouchesRequired = fingerCount
             swipeAction = action
@@ -1735,14 +1877,14 @@ class BlockSwipe: UISwipeGestureRecognizer {
 
 class BlockPinch: UIPinchGestureRecognizer {
     
-    private var pinchAction: ((UIPinchGestureRecognizer)->())?
+    private var pinchAction: ((UIPinchGestureRecognizer) -> Void)?
     
     override init(target: AnyObject, action: Selector) {
         super.init(target: target, action: action)
     }
     
-    init (action: ((UIPinchGestureRecognizer)->())?) {
-        super.init()
+    convenience init (action: ((UIPinchGestureRecognizer) -> Void)?) {
+        self.init()
         pinchAction = action
         addTarget(self, action: "didPinch:")
     }
@@ -1758,14 +1900,14 @@ class BlockPinch: UIPinchGestureRecognizer {
 
 class BlockLongPress: UILongPressGestureRecognizer {
     
-    private var longPressAction: ((UILongPressGestureRecognizer)->())?
+    private var longPressAction: ((UILongPressGestureRecognizer) -> Void)?
     
     override init(target: AnyObject, action: Selector) {
         super.init(target: target, action: action)
     }
     
-    init (action: ((UILongPressGestureRecognizer)->())?) {
-        super.init()
+    convenience init (action: ((UILongPressGestureRecognizer) -> Void)?) {
+        self.init()
         longPressAction = action
         addTarget(self, action: "didLongPressed:")
     }

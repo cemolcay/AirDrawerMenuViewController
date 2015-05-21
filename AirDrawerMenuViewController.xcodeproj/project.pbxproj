@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B2816A311B0E224B00D4A7FE /* CEMKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2816A301B0E224B00D4A7FE /* CEMKit.swift */; };
 		B2B4B0CF1AB17FE000B5EFC7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */; };
 		B2B4B0D11AB17FE000B5EFC7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0D01AB17FE000B5EFC7 /* ViewController.swift */; };
 		B2B4B0D41AB17FE000B5EFC7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2B4B0D21AB17FE000B5EFC7 /* Main.storyboard */; };
@@ -16,7 +17,6 @@
 		B2B4B0F01AB17FFA00B5EFC7 /* AirDrawerMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0EF1AB17FFA00B5EFC7 /* AirDrawerMenuViewController.swift */; };
 		B2B4B0F61AB1803900B5EFC7 /* AirDrawerMenuContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0F51AB1803900B5EFC7 /* AirDrawerMenuContentViewController.swift */; };
 		B2B4B0F81AB1959100B5EFC7 /* AirDrawerMenuLeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0F71AB1959100B5EFC7 /* AirDrawerMenuLeftViewController.swift */; };
-		B2B4B0FA1AB1A4EC00B5EFC7 /* CEMKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B4B0F91AB1A4EC00B5EFC7 /* CEMKit.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B2816A301B0E224B00D4A7FE /* CEMKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEMKit.swift; sourceTree = "<group>"; };
 		B2B4B0C91AB17FE000B5EFC7 /* AirDrawerMenuViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AirDrawerMenuViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B4B0CD1AB17FE000B5EFC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -43,7 +44,6 @@
 		B2B4B0EF1AB17FFA00B5EFC7 /* AirDrawerMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirDrawerMenuViewController.swift; sourceTree = "<group>"; };
 		B2B4B0F51AB1803900B5EFC7 /* AirDrawerMenuContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirDrawerMenuContentViewController.swift; sourceTree = "<group>"; };
 		B2B4B0F71AB1959100B5EFC7 /* AirDrawerMenuLeftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirDrawerMenuLeftViewController.swift; sourceTree = "<group>"; };
-		B2B4B0F91AB1A4EC00B5EFC7 /* CEMKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CEMKit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +64,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B2816A2F1B0E224B00D4A7FE /* CEMKit */ = {
+			isa = PBXGroup;
+			children = (
+				B2816A301B0E224B00D4A7FE /* CEMKit.swift */,
+			);
+			path = CEMKit;
+			sourceTree = "<group>";
+		};
 		B2B4B0C01AB17FE000B5EFC7 = {
 			isa = PBXGroup;
 			children = (
@@ -85,9 +93,9 @@
 		B2B4B0CB1AB17FE000B5EFC7 /* AirDrawerMenuViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B2816A2F1B0E224B00D4A7FE /* CEMKit */,
 				B2B4B0EE1AB17FEE00B5EFC7 /* AirDrawerMenuViewController */,
 				B2B4B0CE1AB17FE000B5EFC7 /* AppDelegate.swift */,
-				B2B4B0F91AB1A4EC00B5EFC7 /* CEMKit.swift */,
 				B2B4B0D01AB17FE000B5EFC7 /* ViewController.swift */,
 				B2B4B0D21AB17FE000B5EFC7 /* Main.storyboard */,
 				B2B4B0D51AB17FE000B5EFC7 /* Images.xcassets */,
@@ -236,7 +244,7 @@
 				B2B4B0F81AB1959100B5EFC7 /* AirDrawerMenuLeftViewController.swift in Sources */,
 				B2B4B0CF1AB17FE000B5EFC7 /* AppDelegate.swift in Sources */,
 				B2B4B0F01AB17FFA00B5EFC7 /* AirDrawerMenuViewController.swift in Sources */,
-				B2B4B0FA1AB1A4EC00B5EFC7 /* CEMKit.swift in Sources */,
+				B2816A311B0E224B00D4A7FE /* CEMKit.swift in Sources */,
 				B2B4B0F61AB1803900B5EFC7 /* AirDrawerMenuContentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -435,6 +443,7 @@
 				B2B4B0EA1AB17FE000B5EFC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B2B4B0EB1AB17FE000B5EFC7 /* Build configuration list for PBXNativeTarget "AirDrawerMenuViewControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -443,6 +452,7 @@
 				B2B4B0ED1AB17FE000B5EFC7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

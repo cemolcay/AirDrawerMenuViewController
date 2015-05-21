@@ -8,7 +8,7 @@
 
 import UIKit
 
-let AirDrawerMenuViewControllerAnimationDuration: NSTimeInterval = 0.3
+let AirDrawerMenuViewControllerAnimationDuration: NSTimeInterval = 0.5
 
 extension UIViewController {
 
@@ -54,57 +54,38 @@ class AirDrawerMenuViewController: UIViewController {
     // MARK: Properties
     
     var contentViewController: AirDrawerMenuContentViewController!
-    var leftMenuViewController: AirDrawerMenuLeftViewController!
-    
-    var dataSource: AirDrawerMenuViewControllerDataSource?
-    var drawerDelegate: AirDrawerMenuViewControllerDelegate?
-
-    
-    // MARK: Init
-    
-    override init () {
-        super.init()
-        contentViewController = AirDrawerMenuContentViewController()
-    }
-    
-    required init (coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        contentViewController = AirDrawerMenuContentViewController()
-    }
-    
-    override init (nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        contentViewController = AirDrawerMenuContentViewController()
-    }
-    
-    
-    // MARK: Lifecycle
-    
-    override func viewWillAppear(animated: Bool) {
-        
-        if leftMenuViewController.parentViewController != self {
+    var leftMenuViewController: AirDrawerMenuLeftViewController! {
+        didSet {
             leftMenuViewController.willMoveToParentViewController(self)
             addChildViewController(leftMenuViewController)
             leftMenuViewController.view.frame = view.frame
             view.addSubview(leftMenuViewController.view)
             leftMenuViewController.didMoveToParentViewController(self)
+            view.sendSubviewToBack(leftMenuViewController.view)
         }
+    }
+    
+    var dataSource: AirDrawerMenuViewControllerDataSource?
+    var drawerDelegate: AirDrawerMenuViewControllerDelegate?
+
+    
+    // MARK: Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        if contentViewController.parentViewController != self {
-            contentViewController = AirDrawerMenuContentViewController ()
-            contentViewController.willMoveToParentViewController(self)
-            addChildViewController(contentViewController)
-            contentViewController.view.frame = view.frame
-            view.addSubview(contentViewController.view)
-            contentViewController.didMoveToParentViewController(self)
-        }
+        contentViewController = AirDrawerMenuContentViewController ()
+        contentViewController.willMoveToParentViewController(self)
+        addChildViewController(contentViewController)
+        contentViewController.view.frame = view.frame
+        view.addSubview(contentViewController.view)
+        contentViewController.didMoveToParentViewController(self)
     }
     
     
     // MARK: Drawer
     
     func reloadDrawer () {
-        
         if let ds = dataSource {
             
             leftMenuViewController.reloadLeftMenu()
@@ -124,12 +105,12 @@ class AirDrawerMenuViewController: UIViewController {
     
     func openMenu (completion: (() -> Void)? = nil) {
     
-        drawerDelegate?.AirDrawerMenuViewControllerWillOpenMenu!()
+        drawerDelegate?.AirDrawerMenuViewControllerWillOpenMenu? ()
         
         contentViewController.view.userInteractionEnabled = false
         leftMenuViewController.openLeftMenuAnimation(nil)
         contentViewController.openAnimation {
-            self.drawerDelegate?.AirDrawerMenuViewControllerDidOpenMenu!()
+            self.drawerDelegate?.AirDrawerMenuViewControllerDidOpenMenu? ()
             completion? ()
         }
         
@@ -137,13 +118,13 @@ class AirDrawerMenuViewController: UIViewController {
     
     func closeMenu (completion: (() -> Void)? = nil) {
         
-        drawerDelegate?.AirDrawerMenuViewControllerWillCloseMenu!()
+        drawerDelegate?.AirDrawerMenuViewControllerWillCloseMenu? ()
         
         contentViewController.view.userInteractionEnabled = true
         
         leftMenuViewController.closeLeftMenuAnimation(nil)
         contentViewController.closeAnimation {
-            self.drawerDelegate?.AirDrawerMenuViewControllerDidCloseMenu!()
+            self.drawerDelegate?.AirDrawerMenuViewControllerDidCloseMenu? ()
             completion? ()
         }
     }
@@ -162,4 +143,3 @@ class AirDrawerMenuViewController: UIViewController {
     }
     
 }
-
